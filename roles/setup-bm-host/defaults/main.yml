@@ -1,0 +1,24 @@
+---
+# defaults file for roles/setup-bm-host
+default
+  - wget
+  - libvirt
+  - qemu-kvm
+  - virt-manager
+  - virt-install
+  - libguestfs-tools
+  - libguestfs-xfs
+  - xorg-x11-apps
+  - xauth
+  - virt-viewer
+  - xorg-x11-fonts-*
+  - net-tools
+  - ntpdate
+  - mlocate
+  - sshpass
+  - python-virtualbmc
+  - ipmitool
+  - python-setuptools
+  - ansible
+  - tigervnc-server
+  - tigervnc
