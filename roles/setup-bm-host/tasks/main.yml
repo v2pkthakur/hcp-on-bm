@@ -19,7 +19,7 @@
     name: libvirtd
     enabled: yes
 
-- name: Flushing iptables firewall [Not a good practive]
+- name: Flushing iptables firewall [Not a good practice]
   iptables:
     flush: yes
 
