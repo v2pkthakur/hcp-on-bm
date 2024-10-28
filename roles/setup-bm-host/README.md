@@ -1,12 +1,19 @@
-Role Name
+Setup BM Host
 =========
+This role sets up initial configurations on the BareMetal host. 
+This will include:  
 
-A brief description of the role goes here.
+```
+- Subscribe to Red Hat Subscription Manager  
+- Deploy Initial Packages for LibVirt Virtualization  
+- Start Libvirt Service  
+```
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role provide default variables for packages.  
+However, for subscription, it needs user to provide their own subscription key.   
 
 Role Variables
 --------------
