@@ -4,4 +4,8 @@
   tasks: 
   - ansible.builtin.import_role:
       name: setup-bm-host
+  - ansible.builtin.import_role:
+      name: setup-helper-services
+  - ansible.builtin.import_role:
+      name: setup-bm-host
 

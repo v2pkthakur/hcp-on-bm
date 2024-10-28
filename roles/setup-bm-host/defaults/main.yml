@@ -1,6 +1,6 @@
 ---
 # defaults file for roles/setup-bm-host
-default
+default: 
   - wget
   - libvirt
   - qemu-kvm
