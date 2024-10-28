@@ -1,6 +1,9 @@
 ---
 # defaults file for roles/setup-bm-host
-default: 
+activation_key: "" 
+org_id: ""
+
+basic_packages: 
   - wget
   - libvirt
   - qemu-kvm
