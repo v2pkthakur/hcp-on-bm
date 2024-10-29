@@ -1,10 +1,10 @@
 ---
 # tasks file for roles/setup-bm-host
-- name: Registering Hypervisor Node to Subscription Manager
-  redhat_subscription:
-    state: present
-    activationkey: "{{ activation_key }}"
-    org_id: "{{ org_id }}"
+# - name: Registering Hypervisor Node to Subscription Manager
+#  redhat_subscription:
+#    state: present
+#    activationkey: "{{ activation_key }}"
+#    org_id: "{{ org_id }}"
 
 - name: Install Basic Required Packages.
   yum:
