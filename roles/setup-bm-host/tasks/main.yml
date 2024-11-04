@@ -26,7 +26,7 @@
 - name: Create ssh KeyPair
   shell: |
     ssh-keygen -b 2048 -t rsa -f ~/.ssh/lab_rsa -q -N ""
-  when: ssh_key_status.exists
+  when: ssh_key_status.stat.exists
 
 # Setting Strict HostKey Checking False
 #- name: Setting host key checking false for Ansible
