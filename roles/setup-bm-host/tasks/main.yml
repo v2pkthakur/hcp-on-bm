@@ -1,10 +1,5 @@
 ---
-# tasks file for roles/setup-bm-host
-# - name: Registering Hypervisor Node to Subscription Manager
-#  redhat_subscription:
-#    state: present
-#    activationkey: "{{ activation_key }}"
-#    org_id: "{{ org_id }}"
+# Start with Installing the required packages on the Host
 
 - name: Install Basic Required Packages.
   yum:
@@ -13,99 +8,28 @@
   with_items:
   - "{{ basic_packages }}"
 
+# Once Packages are installed, lets start the Libvirt Service
 - name: Start Libvirtd Service
   systemd:
     state: started
     name: libvirtd
     enabled: yes
 
-- name: Flushing iptables firewall [Not a good practice]
-  iptables:
-    flush: yes
-
-- name: Remove /var/lib/libvirt/images Directory
-  file:
-    path: /var/lib/libvirt/images/
-    state: absent
-
-- name: Create /home/images/ Directory
-  file:
-    path: /home/images/
-    state: directory
-    mode: '0755'
-
-- name: Create symbolic link from /var/lib/libvirt/images/ to /home/images/
-  file:
-    src: /home/images/
-    dest: /var/lib/libvirt/images
-    state: link
-
-- name: Put SELinux in permissive mode. [Not a good practice]
-  selinux:
-    policy: targeted
-    state: permissive
-
-- name: Setting RP_Filter to 0 permanently.
-  copy:
-    dest: /etc/sysctl.d/98-rp-filter.conf
-    content: |
-      net.ipv4.conf.default.rp_filter = 0
-      net.ipv4.conf.all.rp_filter = 0
-
-- name: Getting rp_filter variables to set
-  shell: |
-    sysctl -A 2> /dev/null | grep "\.rp_filter"  | cut -d"=" -f1
-  register: sysctl_rp_filter
-
-- name: Setting Systcl rp_filter variables dynamically
-  sysctl:
-    name: "{{ item }}"
-    value: '0'
-    sysctl_set: yes
-    state: present
-  with_items:
-    - "{{ sysctl_rp_filter.stdout_lines }}"
-
-#- name: Create User Stack
-#  user:
-#    name: stack
-#    password: $6$rounds=656000$mysecretsalt$QizTP3eI28R.NcN.vSBMNTL.w0hJu0pmHYTcUgWBQb0Jzt1mSyYp/66LsTwVmNnQHvs.wIEpmonvAvsfpGvMr/
+# Create SSH KeyPair
 
 - name: Create ssh KeyPair
   shell: |
     ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
 
-- name: Creating systemd service for virtualbmc
-  copy:
-    dest: /usr/lib/systemd/system/virtualbmc@.service
-    content: |
-      [Unit]
-      Description=VirtualBMC %i service
-      After=network.target libvirtd.services
-      
-      [Service]
-      Type=forking
-      PIDFile=/root/.vbmc/%i/pid
-      ExecStart=/bin/vbmc start %i
-      ExecStop=/bin/vbmc stop %i
-      Restart=always
-      
-      [Install]
-      WantedBy=multi-user.target
-
-- name: Giving stack user sudo permission to run vbmc
-  copy:
-    dest: /etc/sudoers.d/vbmc
-    content: |
-      stack	ALL=(root)	NOPASSWD:/usr/bin/vbmc
-
-- name: Setting host key checking flase for Ansible
+# Setting Strict HostKey Checking False
+- name: Setting host key checking false for Ansible
   lineinfile:
     path: /etc/ansible/ansible.cfg
     regexp: '^#host_key_checking'
     insertafter: '^#host_key_checking'
     line: host_key_checking = False
 
+# Enable Nested KVM
 - name: Enable Nested KVM
   copy:
     dest: /etc/modprobe.d/kvm-nested.conf
