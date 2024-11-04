@@ -40,4 +40,4 @@
 # Prepare the KVM Image 
 - name: Remove Cloud-Init & Add Password  
   shell: | 
-    virt-customize -a {{ rhel9_kvm_image }} --root-password password:redhat --ssh-inject "root:file:/root/.ssh/id_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y'
+    virt-customize -a ./files/{{ rhel9_kvm_image }} --root-password password:redhat --ssh-inject "root:file:/root/.ssh/id_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y'

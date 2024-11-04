@@ -3,6 +3,8 @@
 activation_key: "" 
 org_id: ""
 
+rhel9_kvm_image: "rhel-9.4-x86_64-kvm.qcow2"
+
 basic_packages: 
   - wget
   - libvirt
