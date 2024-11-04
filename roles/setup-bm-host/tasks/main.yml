@@ -15,11 +15,18 @@
     name: libvirtd
     enabled: yes
 
-# Create SSH KeyPair
+# Check existence of SSH KeyPair
+- name: Check if SSH KeyPair exists
+  stat:
+    path: ~/.ssh/lab_rsa
+  register: ssh_key_status
 
+
+# Create SSH KeyPair
 - name: Create ssh KeyPair
   shell: |
     ssh-keygen -b 2048 -t rsa -f ~/.ssh/lab_rsa -q -N ""
+  when: ssh_key_status.exists
 
 # Setting Strict HostKey Checking False
 #- name: Setting host key checking false for Ansible
