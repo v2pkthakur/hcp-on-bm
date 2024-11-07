@@ -51,3 +51,8 @@
     export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ role_path }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/id_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y'
   tags:
   - virt
+
+- name: Move the Customized KVM Image  
+  shell: | 
+    cp "{{ role_path }}/files/{{ rhel9_kvm_image }}" /var/lib/libvirt/images/
+  
