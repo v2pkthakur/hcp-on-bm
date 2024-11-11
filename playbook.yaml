@@ -1,6 +1,8 @@
 - name: Prepare BareMetal Host
   hosts: localhost
   become: true
+  vars_files:
+    - vars.yaml
   tasks: 
   - ansible.builtin.import_role:
       name: setup-bm-host
