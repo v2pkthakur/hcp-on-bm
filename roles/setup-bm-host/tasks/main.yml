@@ -51,4 +51,8 @@
   - "{{ ip_list }}"
   tags:
   - virt
-
+  
+- name: Define the Helper VM 
+  shell: |
+    virt-install --import --name "{{ helper_name }}" --memory "{{ helper_memory }}" --vcpus "{{ helper_vcpus }}" --cpu host --disk "{{ helper_disk }}".qcow2,format=qcow2,bus=virtio --disk "{{ helper_disk }}" \
+--network bridge=virbr0,model=virtio --os-type=linux --os-variant=rhel9 --graphics spice --noautoconsole
