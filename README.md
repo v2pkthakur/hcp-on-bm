@@ -21,6 +21,9 @@ Pull the Ansible Repo
 
 ```
 git clone https://github.com/v2pkthakur/hcp-on-bm.git
+cp rhel-9.4-x86_64-kvm.qcow2 hcp-on-bm/roles/setup-bm-host/files/
 
+cd hcp-on-bm
+ansible-playbook playbook.yaml
 ```
 
