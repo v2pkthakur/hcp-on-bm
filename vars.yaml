@@ -16,4 +16,8 @@ ip_list:
   hcp_cluster1_worker2: 45
   hcp_cluster1_worker3: 46
 
+helper_name: helper
+helper_disk: helper_disk
+helper_memory: 8192 
+helper_vcpus: 4
 
