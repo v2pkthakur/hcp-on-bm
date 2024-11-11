@@ -38,6 +38,14 @@
 - name: Remove Cloud-Init & Add Password  
   shell: | 
     export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ role_path }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/id_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y'
+    
+# Prepare the Helper Image 
+- name: Remove Cloud-Init & Add Password  
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/{{ rhel9_kvm_image }}"
+    dest: /var/lib/libvirt/images/"{{ helper_disk }}"
+  tags:
+  - copy 
 
 - name: Move the Customized KVM Image  
   shell: | 
@@ -49,10 +57,12 @@
     --xml "<host mac='52:54:00:e2:54:{{ item.value }}' ip='192.168.122.{{ item.value }}' />" --live --config
   with_dict:
   - "{{ ip_list }}"
+  ignore_errors: yes
   tags:
   - virt
   
 - name: Define the Helper VM 
   shell: |
-    virt-install --import --name "{{ helper_name }}" --memory "{{ helper_memory }}" --vcpus "{{ helper_vcpus }}" --cpu host --disk "{{ helper_disk }}".qcow2,format=qcow2,bus=virtio --disk "{{ helper_disk }}" \
---network bridge=virbr0,model=virtio --os-type=linux --os-variant=rhel9 --graphics spice --noautoconsole
+    virt-install --import --name "{{ helper_name }}" --memory "{{ helper_memory }}" --vcpus "{{ helper_vcpus }}" --cpu host --disk "{{ helper_disk }}".qcow2,format=qcow2,bus=virtio --disk "{{ helper_disk }}"  --os-type=linux --os-variant=rhel9.4 --graphics spice --noautoconsole
+  tags:
+  - virt
