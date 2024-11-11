@@ -1,2 +1,15 @@
 ---
 # tasks file for roles/setup-helper-services
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/some_directory
+    state: directory
+    mode: '0755'
+    owner: qemu
+    group: qemu
+
+- name: Create DNS VM Image 
+  shell: 
+    cp /var/lib/libvirt/"{{rhel9_kvm_image}}" /var/lib/libvirt/dns/"{{rhel9_kvm_image}}" 
+
+- name: 

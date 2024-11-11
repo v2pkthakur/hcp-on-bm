@@ -55,4 +55,13 @@
 - name: Move the Customized KVM Image  
   shell: | 
     cp "{{ role_path }}/files/{{ rhel9_kvm_image }}" /var/lib/libvirt/images/
+
+- name: Setup the DHCP Network 
+  shell: | 
+      virsh net-update --network "default" add-last ip-dhcp-host \
+      --xml "<host mac='52:54:00:e2:54:{{ item[value] }}' ip='192.168.122.{{ item[value] }}' />" \
+      --live --config
+  with_items:
+  - {{ip_list}}
+
   

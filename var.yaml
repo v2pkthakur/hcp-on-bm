@@ -1,0 +1,19 @@
+# List of IP Addresses to be used on the KVM Lab. 
+# We will be using 192.168.122.0/24 Network. Hence these  
+#   
+ip_list:
+  helper_server: 21 
+  hub_master1: 31
+  hub_master2: 32
+  hub_master3: 33
+  hub_worker1: 34
+  hub_worker2: 35
+  hub_worker3: 36
+  hcp_cluster1_master1: 41 
+  hcp_cluster1_master2: 42
+  hcp_cluster1_master3: 43
+  hcp_cluster1_worker1: 44
+  hcp_cluster1_worker2: 45
+  hcp_cluster1_worker3: 46
+
+
