@@ -23,7 +23,7 @@
 
 - name: Create SSH Key if not existing
   shell: |
-    ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""  
+    ssh-keygen -b 2048 -t rsa -f ~/.ssh/lab_rsa -q -N ""  
   when: ssh_key_status.stat.exists == 'false'
 
 # Enable Nested KVM
