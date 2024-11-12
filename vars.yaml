@@ -21,3 +21,7 @@ helper_disk: helper_disk.qcow2
 helper_memory: 8192 
 helper_vcpus: 4
 
+dns_packages:
+  - bind
+  - bind-utils
+

@@ -45,7 +45,7 @@
 # Prepare the KVM Image 
 - name: Remove Cloud-Init & Add Password  
   shell: | 
-    export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ role_path }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/lab_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y' --run-command 'echo "PermitRootLogin yes" >>/etc/sshd/sshd_config'
+    export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ role_path }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/lab_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y' --run-command 'echo "PermitRootLogin yes" >>/etc/ssh/sshd_config'
     
 
 # Once Check if Key Exists

@@ -1,0 +1,14 @@
+---
+# tasks file for setup_dns
+- name: Setup Hostname
+  shell: |
+    hostnamectl set-hostname helper.mylab.com
+
+- name: Subscription
+  shell:
+    "subscription-manager register --org={{org_id }} --activationkey={{ activation_key}} --force" 
+
+- name: Install DNS Packages
+  dnf:
+    name: "{{ dns_packages }}"
+    state: installed

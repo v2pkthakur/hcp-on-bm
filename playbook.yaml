@@ -3,11 +3,17 @@
   become: true
   vars_files:
     - vars.yaml
+    - vault.yaml
   tasks: 
   - ansible.builtin.import_role:
       name: setup-bm-host
-  #- ansible.builtin.import_role:
-  #    name: setup-helper-services
+  - ansible.builtin.import_role:
+      name: setup-dns
+    tags:
+      - dns
+    delegate_to: 192.168.122.{{ ip_list.helper_server }}
+
+  
   #- ansible.builtin.import_role:
   #    name: setup-hub-cluster
 
