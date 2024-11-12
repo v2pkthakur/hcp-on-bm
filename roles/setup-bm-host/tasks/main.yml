@@ -16,6 +16,7 @@
     enabled: yes
 
 
+# Once Check if Key Exists
 - name: Check the SSH KeyPair Existence
   stat:
     path: "~/.ssh/lab_rsa"
@@ -23,18 +24,14 @@
   tags:
     - ssh
 
-- name: Debug
-  debug:
-    msg: "{{ ssh_key_status.stat.exists }}"
-  tags:
-    - ssh
-
-
+# Create Key if not existing
 - name: Create SSH Key if not existing
-  shell: |
-    ssh-keygen -b 2048 -t rsa -f ~/.ssh/lab_rsa -q -N ""  
-# when: ssh_key_status.stat.exists == 'false'
-  ignore_errors: yes
+  community.crypto.openssh_keypair:
+    path: "~/.ssh/lab_rsa"
+    type: rsa
+    size: 2048
+    mode: '0600'
+  when: ssh_key_status.stat.exists == false 
   tags:
     - ssh
 
@@ -45,28 +42,35 @@
     content: |
       options kvm-intel nested=1
 
-
 # Prepare the KVM Image 
 - name: Remove Cloud-Init & Add Password  
   shell: | 
-    export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ role_path }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/lab_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y'
+    export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ role_path }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/lab_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y' --run-command 'echo "PermitRootLogin yes" >>/etc/sshd/sshd_config'
     
-# Destroy Existing Disk. If Available. 
-- name: Destroy Helper Qcow2 
-  ansible.builtin.file:
-    path: "/var/lib/libvirt/images/{{helper_disk }}"
-    state: absent
+
+# Once Check if Key Exists
+- name: Check the Helper Disk Existence
+  stat:
+    path: "/var/lib/libvirt/images/{{ helper_disk }}"
+  register: helper_disk_status
   tags:
     - virt
-    
+   
 # Prepare the Helper Image 
 - name: Create Helper VM Disk
   ansible.builtin.copy:
     src: "{{ role_path }}/files/{{ rhel9_kvm_image }}"
     dest: "/var/lib/libvirt/images/{{ helper_disk }}"
+  when: helper_disk_status.stat.exists == false
   tags:
-  - copy 
   - virt
+
+- name: Check Network status 
+  shell: virsh net-dumpxml default | grep "ip='192.168.122.21'"
+  register: virt_net_status
+  ignore_errors: yes
+  tags:
+  - net
 
 - name: Setup the DHCP Network 
   shell: | 
@@ -74,11 +78,21 @@
     --xml "<host mac='52:54:00:e2:54:{{ item.value }}' ip='192.168.122.{{ item.value }}' />" --live --config
   with_dict:
   - "{{ ip_list }}"
-  ignore_errors: yes
+  when: virt_net_status.stdout == ''
+  tags:
+  - net
   
+
+- name: Check if VM is running using virsh
+  shell: "virsh dominfo helper| grep 'State' | awk '{print $2}'"
+  register: vm_state
+  tags:
+  - virt
+
 - name: Define the Helper VM 
   shell: |
     virt-install --import --name "{{ helper_name }}" --memory "{{ helper_memory }}" --vcpus "{{ helper_vcpus }}"  --disk "/var/lib/libvirt/images/{{ helper_disk }}",format=qcow2,bus=virtio  --os-variant=rhel9.4 --noautoconsole --network network:default,mac=52:54:00:e2:54:{{ip_list.helper_server}}
+  when: vm_state.stdout == ''
   tags:
   - virt
 
