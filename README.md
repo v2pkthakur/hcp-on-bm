@@ -12,7 +12,9 @@ Start with freshly installed RHEL9 OS on the BM. And make sure you have valid su
 
 ```
 subscription-manager register
-yum install ansible-core -y 
+yum install ansible-core -y
+ansible-galaxy collection install community.libvirt
+ansible-galaxy collection install community.crypto
 ```
 
 Also download `rhel-9.4-x86_64-kvm.qcow2` from access.redhat.com/downloads. 
