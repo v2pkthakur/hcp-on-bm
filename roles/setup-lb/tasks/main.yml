@@ -1,0 +1,30 @@
+---
+# tasks file for setup-lb
+- name: Setup Interface - Hub LB 
+  shell: |
+    nmcli con add type dummy ifname hub_lb ipv4.method manual ipv4.addresses 192.168.122.{{ ip_list.hub_lb }}/24 autoconnect yes && nmcli con up dummy-hub_lb
+
+- name: Setup Interface - Hub LB 
+  shell: |
+    nmcli con add type dummy ifname hcp_cluster1_lb ipv4.method manual ipv4.addresses 192.168.122.{{ ip_list.hcp_cluster1_lb }}/24 autoconnect yes && nmcli con up dummy-hub_lb
+
+- name: Install HAProxy
+  dnf:
+    name: haproxy
+    state: installed
+
+- name: Allow Ports via SELinux
+  shell:
+    semanage port -a -p tcp -t http_port_t 6443
+
+- name: Deploy Config File
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=r
+  notify:
+    - Restart_HAProxy
+
+

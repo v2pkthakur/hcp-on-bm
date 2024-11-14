@@ -12,3 +12,44 @@
   dnf:
     name: "{{ dns_packages }}"
     state: installed
+
+- name: Deploy named.conf
+  template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+    owner: root
+    group: named
+    mode: u=rw,g=r,o=r
+  notify:
+    -  Restart_Named
+    
+- name: Deploy named.rfc1912.zone
+  template:
+    src: named.rfc1912.zones.j2
+    dest: /etc/named.rfc1912.zones
+    owner: root
+    group: named
+    mode: u=rw,g=r,o=r
+  notify:
+    -  Restart_Named
+    
+- name: Deploy "{{ hub_domain }}" zonefile
+  template:
+    src: hub_domain.j2
+    dest: "/var/named/{{ hub_domain }}.db"
+    owner: root
+    group: named
+    mode: u=rw,g=r,o=r
+  notify:
+    -  Restart_Named
+    
+- name: Deploy "{{ hosted_domain }}" zonefile
+  template:
+    src: hosted_domain.j2
+    dest: "/var/named/{{ hosted_domain }}.db"
+    owner: root
+    group: named
+    mode: u=rw,g=r,o=r
+  notify:
+    -  Restart_Named
+    

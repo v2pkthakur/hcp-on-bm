@@ -1,2 +1,6 @@
 ---
 # handlers file for setup_dns
+- name: Restart_Named
+  ansible.builtin.service:
+    name: named
+    state: restarted

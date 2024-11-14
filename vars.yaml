@@ -9,19 +9,26 @@ ip_list:
   hub_worker1: 34
   hub_worker2: 35
   hub_worker3: 36
+  hub_lb: 39
   hcp_cluster1_master1: 41 
   hcp_cluster1_master2: 42
   hcp_cluster1_master3: 43
   hcp_cluster1_worker1: 44
   hcp_cluster1_worker2: 45
   hcp_cluster1_worker3: 46
+  hcp_cluster1_lb: 49
 
 helper_name: helper
 helper_disk: helper_disk.qcow2
 helper_memory: 8192 
 helper_vcpus: 4
 
+##  Variables required by DNS Role 
 dns_packages:
   - bind
   - bind-utils
+
+hub_domain: hub.mylab.com
+hosted_domain: hcp-cluster1.mylab.com
+
 

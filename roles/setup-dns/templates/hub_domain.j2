@@ -1,0 +1,17 @@
+$TTL 1D
+@	IN SOA	helper.{{ hub_domain }}. root.{{hub_domain }}. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+		NS	helper.{{ hub_domain }}.
+helper		A	192.168.122.{{ ip_list.helper_server}}
+master1		A	192.168.122.{{ ip_list.hub_master1}}
+master2		A	192.168.122.{{ ip_list.hub_master2}}
+master3		A	192.168.122.{{ ip_list.hub_master3}}
+worker1		A	192.168.122.{{ ip_list.hub_worker1}}
+worker2		A	192.168.122.{{ ip_list.hub_worker2}}
+worker3		A	192.168.122.{{ ip_list.hub_worker3}}
+api		A	192.168.122.{{ ip_list.hub_lb}}
+*.apps		A	192.168.122.{{ ip_list.hub_lb}}
