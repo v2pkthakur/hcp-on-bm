@@ -32,3 +32,9 @@ hub_domain: hub.mylab.com
 hosted_domain: hcp-cluster1.mylab.com
 
 
+
+##  Variables required by Setup-Hub-Cluster Role 
+ocp_major_version: 4.17
+ocp_minor_version: 0 
+download_dir: /var/lib/libvirt/images/
+hub_vm_folder: /var/lib/libvirt/images/hub

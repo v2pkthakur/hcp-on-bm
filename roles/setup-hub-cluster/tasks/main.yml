@@ -1,0 +1,74 @@
+---
+# Tasks file for setup-hub-cluster
+- name: Check existence of CoreOS Image
+  stat: 
+    path: "{{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2"
+  register: coreos_image_status
+
+
+- name: Get the CoreOS qemu image
+  get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{ ocp_major_version }}/latest/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2.gz"
+    dest: "{{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2.gz"
+  when: coreos_image_status.stat.exists == false
+
+
+- name: Unzip CoreOS KVM Image
+  shell: |
+    gunzip {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2.gz
+  when: coreos_image_status.stat.exists == false
+
+# Check Existence of openshift-install    
+- name: Check existence of openshift-install
+  stat:
+    path: "/usr/bin/openshift-install"
+  register: openshift_installer_status
+
+- name: Get the Openshift Installer
+  get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ ocp_major_version }}.{{ ocp_minor_version }}/openshift-install-linux.tar.gz"
+    dest: "{{ download_dir }}/openshift-install-linux.tar.gz"
+  when: openshift_installer_status.stat.exists == false
+
+- name: Extract openshift-install to /usr/bin
+  ansible.builtin.unarchive:
+    src: "{{ download_dir }}/openshift-install-linux.tar.gz"
+    dest: "/usr/bin"
+  when: openshift_installer_status.stat.exists == false
+
+# Check Existence of oc    
+- name: Check existence of oc cli 
+  stat: 
+    path: "/usr/bin/oc"
+  register: oc_status
+
+- name: Get the Openshift Client
+  get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
+    dest: "{{ download_dir }}/openshift-client-linux.tar.gz"
+  when: oc_status.stat.exists == false
+
+- name: Unarchive OpenShift Client
+  unarchive:
+    src: "{{ download_dir }}/openshift-client-linux.tar.gz"
+    dest: "/usr/bin"
+    mode: 0755
+    remote_src: yes
+  when: oc_status.stat.exists == false
+
+    #- name: Copy oc to /usr/bin
+    #copy:
+    #src: "{{ download_dir }}/oc"
+    #dest: /usr/bin
+    #remote_src: yes
+    #mode: '0755'
+    #when: oc_status.stat.exists == false
+
+- name: Create Directory for Hub Cluster VMs
+  file:
+    path: "{{hub_vm_folder}}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+

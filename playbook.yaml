@@ -18,8 +18,6 @@
       - lb
     delegate_to: 192.168.122.{{ ip_list.helper_server }}
 
-
-  
   #- ansible.builtin.import_role:
   #    name: setup-hub-cluster
 

@@ -1,0 +1,8 @@
+- name: Setting Up Hub Cluster
+  hosts: localhost
+  become: true
+  vars_files:
+    - vars.yaml
+  tasks: 
+  - ansible.builtin.import_role:
+      name: setup-hub-cluster
