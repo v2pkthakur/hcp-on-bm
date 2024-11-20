@@ -3,6 +3,7 @@
   become: true
   vars_files:
     - vars.yaml
+    - vault.yaml 
   tasks: 
   - ansible.builtin.import_role:
       name: setup-hub-cluster

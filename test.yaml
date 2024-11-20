@@ -1,0 +1,12 @@
+- name: Setting Up Hub Cluster
+  hosts: localhost
+  become: true
+  vars_files:
+    - vars.yaml
+      #    - vault.yaml 
+  tasks:
+  - name: Debug
+    debug:
+      # msg: "{{ ip_list| map('select','match', '^hub_master1') | flatten }}"
+      msg: "{{ip_list| selectattr('ip_list','contains','hub_master1') }}"
+

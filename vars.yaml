@@ -38,3 +38,13 @@ ocp_major_version: 4.17
 ocp_minor_version: 0 
 download_dir: /var/lib/libvirt/images/
 hub_vm_folder: /var/lib/libvirt/images/hub
+hub_install_folder: /var/lib/libvirt/images/hub_install
+ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkwmANwoDE3/lvgcDmyPtk1SVXx+NvZSMX8k0nXH7hAM6qbktO1y3WfV8bVTPOahaAUr4UjM2wTO8piiLaN5zppZkh8Jvup6vJGoS3XJbu9l3NDCmZyiFOCMyD+4WY+sS/NZTOIVbeWMDrEh4Xh7aprccfSP2ze1465Z1LKk2afWJmLyAAqukQhPwN4iJIyj7EXHoZmnqBgJPlvPFo04Piwj7xgykba6iQSH/jtgoJlbK+Ks7i2KO1lbV2kjv92WdHL8sNmdisr5kI6qPTg7yXAy1ZyWYDKduv3K2BcVjQn3BzERzh0rIi6hz2w2blFA9ZUlAwi0VL4QsG0pq3a+P"
+hub_name: hub
+base_domain: mylab.com
+hub_master_vms:
+  - master1
+  - master2
+  - master3
+hub_worker_vms:
+  - 

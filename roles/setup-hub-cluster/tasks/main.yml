@@ -72,3 +72,47 @@
     group: root
     mode: '0755'
 
+- name: Delete Install Directory if exists
+  file:
+    path: "{{ hub_install_folder}}"
+    state: absent
+
+- name: Create Directory for Hub Cluster VMs
+  file:
+    path: "{{hub_install_folder}}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+# Copy Install-Config
+- name: Copying install-config.yaml to install dir
+  template:
+    src: install-config.yaml.j2
+    dest: "{{ hub_install_folder }}/install-config.yaml"
+
+# Create Ignition-Files
+- name: Create Manifests
+  shell: |
+      openshift-install create manifests --dir={{ hub_install_folder }}
+
+- name: Disable worker role on master nodes
+  lineinfile:
+    path: "{{ hub_install_folder }}/manifests/cluster-scheduler-02-config.yml"
+    regexp: 'mastersSchedulable'
+    line: "  mastersSchedulable: false"
+
+# Create Ignition-Files
+- name: Create Ignition File
+  shell: |
+    openshift-install create ignition-configs --dir={{ hub_install_folder }}
+
+- name: Set proper permission on Ignition File for qemu to access
+  file:
+    path: "{{ hub_install_folder }}/{{ item }}"
+    mode: '0644'
+  with_items:
+    - bootstrap.ign
+    - master.ign
+    - worker.ign
+
