@@ -3,24 +3,3 @@
 activation_key: "" 
 org_id: ""
 
-rhel9_kvm_image: "rhel-9.4-x86_64-kvm.qcow2"
-
-basic_packages: 
-  - wget
-  - guestfs-tools
-  - libvirt
-  - qemu-kvm
-  - virt-manager
-  - virt-install
-  - libguestfs-tools
-  - libguestfs-xfs
-  - xauth
-  - virt-viewer
-  - xorg-x11-fonts-*
-  - net-tools
-  - mlocate
-  - sshpass
-  - ipmitool
-  - python-setuptools
-  - tigervnc-server
-  - tigervnc

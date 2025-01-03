@@ -1,0 +1,21 @@
+- name: Cleanup
+  hosts: localhost
+  become: true
+  tasks:
+  - name: Destroy Hub Masters
+    shell: |
+      virsh undefine hub_master1 && virsh undefine hub_master2 && virsh undefine hub_master3
+      virsh destroy hub_master1 && virsh destroy hub_master2 && virsh destroy hub_master3
+      rm -f /var/lib/libvirt/images/hub/hub_master1.qcow2 
+      rm -f /var/lib/libvirt/images/hub/hub_master2.qcow2 
+      rm -f /var/lib/libvirt/images/hub/hub_master3.qcow2 
+
+  - name: Destroy Hub Bootstrap
+    shell: |
+      virsh undefine hub_bootstrap  && virsh destroy hub_bootstrap
+      rm -f /var/lib/libvirt/hub/hub_bootstrap.qcow2 
+
+  - name: Destroy Helper VM
+    shell: |
+      virsh undefine helper && virsh destroy helper
+      rm -f /var/lib/libvirt/images/helper_disk.qcow2 

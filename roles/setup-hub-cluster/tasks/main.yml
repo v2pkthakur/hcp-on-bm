@@ -8,7 +8,7 @@
 
 - name: Get the CoreOS qemu image
   get_url:
-    url: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{ ocp_major_version }}/latest/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2.gz"
+    url: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{ ocp_major_version }}/{{ ocp_major_version }}.{{ocp_minor_version}}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2.gz"
     dest: "{{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2.gz"
   when: coreos_image_status.stat.exists == false
 
@@ -55,14 +55,6 @@
     mode: 0755
     remote_src: yes
   when: oc_status.stat.exists == false
-
-    #- name: Copy oc to /usr/bin
-    #copy:
-    #src: "{{ download_dir }}/oc"
-    #dest: /usr/bin
-    #remote_src: yes
-    #mode: '0755'
-    #when: oc_status.stat.exists == false
 
 - name: Create Directory for Hub Cluster VMs
   file:
@@ -115,4 +107,29 @@
     - bootstrap.ign
     - master.ign
     - worker.ign
+- name: Create Disk Image for Bootstrap
+  shell: |
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_bootstrap.qcow2 100G
 
+- name: Defining the OCP Bootstrap nodes
+  shell: |
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_bootstrap.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_bootstrap}} --name hub_bootstrap --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/bootstrap.ign" --dry-run --print-xml > /tmp/hub_bootstrap.xml
+    virsh define /tmp/hub_bootstrap.xml && virsh start hub_bootstrap
+
+- name: Create Disk Image for Master1
+  shell: |
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_master1.qcow2 100G
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_master2.qcow2 100G
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_master3.qcow2 100G
+
+- name: Defining the Master nodes
+  shell: |
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_master1}} --name hub_master1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master1.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_master2}} --name hub_master2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master2.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_master3}} --name hub_master3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master3.xml
+    virsh define /tmp/hub_master1.xml
+    virsh define /tmp/hub_master2.xml
+    virsh define /tmp/hub_master3.xml
+    virsh start hub_master1 
+    virsh start hub_master2 
+    virsh start hub_master3

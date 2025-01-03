@@ -3,6 +3,10 @@
 - name: Setup Hostname
   shell: |
     hostnamectl set-hostname helper.mylab.com
+  retries: 10
+  delay: 5
+  register: result
+  until: result.rc == 0
 
 - name: Subscription
   shell:
@@ -53,3 +57,8 @@
   notify:
     -  Restart_Named
     
+- name: Start NAmed Service
+  service:
+    name: named
+    state: started 
+    enabled: true

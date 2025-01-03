@@ -3,6 +3,7 @@
 #   
 ip_list:
   helper_server: 21 
+  hub_bootstrap: 30
   hub_master1: 31
   hub_master2: 32
   hub_master3: 33
@@ -23,6 +24,31 @@ helper_disk: helper_disk.qcow2
 helper_memory: 8192 
 helper_vcpus: 4
 
+## Variables used by Setup BM Role 
+
+rhel9_kvm_image: "rhel-9.5-x86_64-kvm.qcow2"
+
+basic_packages: 
+  - wget
+  - vim
+  - guestfs-tools
+  - libvirt
+  - qemu-kvm
+  - virt-manager
+  - virt-install
+  - libguestfs-tools
+  - libguestfs-xfs
+  - xauth
+  - virt-viewer
+  - xorg-x11-fonts-*
+  - net-tools
+  - mlocate
+  - sshpass
+  - ipmitool
+  - python-setuptools
+  - tigervnc-server
+  - tigervnc
+
 ##  Variables required by DNS Role 
 dns_packages:
   - bind
@@ -34,12 +60,12 @@ hosted_domain: hcp-cluster1.mylab.com
 
 
 ##  Variables required by Setup-Hub-Cluster Role 
-ocp_major_version: 4.17
+ocp_major_version: 4.16
 ocp_minor_version: 0 
 download_dir: /var/lib/libvirt/images/
 hub_vm_folder: /var/lib/libvirt/images/hub
 hub_install_folder: /var/lib/libvirt/images/hub_install
-ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkwmANwoDE3/lvgcDmyPtk1SVXx+NvZSMX8k0nXH7hAM6qbktO1y3WfV8bVTPOahaAUr4UjM2wTO8piiLaN5zppZkh8Jvup6vJGoS3XJbu9l3NDCmZyiFOCMyD+4WY+sS/NZTOIVbeWMDrEh4Xh7aprccfSP2ze1465Z1LKk2afWJmLyAAqukQhPwN4iJIyj7EXHoZmnqBgJPlvPFo04Piwj7xgykba6iQSH/jtgoJlbK+Ks7i2KO1lbV2kjv92WdHL8sNmdisr5kI6qPTg7yXAy1ZyWYDKduv3K2BcVjQn3BzERzh0rIi6hz2w2blFA9ZUlAwi0VL4QsG0pq3a+P"
+ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDETjxXO69FH5lu1P+ziKwBvWftc04F1RlP17wdzt/JfaIB2DHs+77bdXoLcBSHPxosaQZ64tcbhpTW7jJ3nXYd8vjydWVrVNMzODEKcg9Aj+QGqYVsADKPdzw8H9va0MHi9T1TZA3nYXj8Z9K1JXSQ/CEnoTuO+ZNzLquqwon9djNlND+3uWm+gokMDKNNJQpBSGopAkMXwAP72pnTOi1qiuAU6NiTaV3pws0WbfSymrItGeWgNEHxWpIQ+t3mKdBmakZR+S+P0iHTcvGifeuyJ5S77+DTLeRuZutsT7y2BGNtQre11QMHt81hDmM9NqjUqkzk85lcFI3Lbp5XR7OL"
 hub_name: hub
 base_domain: mylab.com
 hub_master_vms:

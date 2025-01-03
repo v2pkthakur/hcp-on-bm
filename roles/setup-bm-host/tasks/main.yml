@@ -96,3 +96,8 @@
   tags:
   - virt
 
+- name: Attach New Interfaces
+  shell: |
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:39
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:49
+    
