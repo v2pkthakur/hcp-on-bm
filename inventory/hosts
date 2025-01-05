@@ -2,7 +2,7 @@
 
 
 [helper]
-192.168.122.21 ansible_ssh_private_key_file=~/.ssh/lab_rsa
+192.168.122.21 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [hub]
 

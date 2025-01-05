@@ -13,7 +13,7 @@
   - name: Destroy Hub Bootstrap
     shell: |
       virsh undefine hub_bootstrap  && virsh destroy hub_bootstrap
-      rm -f /var/lib/libvirt/hub/hub_bootstrap.qcow2 
+      rm -f /var/lib/libvirt/images/hub/hub_bootstrap.qcow2 
 
   - name: Destroy Helper VM
     shell: |

@@ -75,7 +75,7 @@
 - name: Setup the DHCP Network 
   shell: | 
     virsh net-update --network "default" add-last ip-dhcp-host \
-    --xml "<host mac='52:54:00:e2:54:{{ item.value }}' ip='192.168.122.{{ item.value }}' />" --live --config
+    --xml "<host mac='52:54:00:e2:54:{{ item.value }}' name='{{ item.key }}' ip='192.168.122.{{ item.value }}' />" --live --config
   with_dict:
   - "{{ ip_list }}"
   when: virt_net_status.stdout == ''
@@ -101,3 +101,6 @@
     virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:39
     virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:49
     
+- name: Wait for the VM to boot
+  shell: |
+    sleep 30s

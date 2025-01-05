@@ -15,7 +15,7 @@
 
 - name: Allow Ports via SELinux
   shell:
-    semanage port -a -p tcp -t http_port_t 6443
+    semanage port -a -p tcp -t http_port_t 6443 && semanage port -a -p tcp -t http_port_t 22623
 
 - name: Deploy Config File
   template:

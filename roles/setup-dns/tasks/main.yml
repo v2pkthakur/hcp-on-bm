@@ -1,8 +1,7 @@
 ---
 # tasks file for setup_dns
 - name: Setup Hostname
-  shell: |
-    hostnamectl set-hostname helper.mylab.com
+  shell: hostnamectl set-hostname helper.mylab.com
   retries: 10
   delay: 5
   register: result
