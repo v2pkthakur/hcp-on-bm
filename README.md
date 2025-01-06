@@ -19,15 +19,33 @@ ansible-galaxy collection install community.crypto
 
 Also download `rhel-9.4-x86_64-kvm.qcow2` from access.redhat.com/downloads. 
 
-Pull the Ansible Repo
-
 ```
 git clone https://github.com/v2pkthakur/hcp-on-bm.git
 cp rhel-9.4-x86_64-kvm.qcow2 hcp-on-bm/roles/setup-bm-host/files/
-
-cd hcp-on-bm
-ansible-playbook playbook.yaml
 ```
+
+Pull the Ansible Repo and explore the inventory and variables and update where required. 
+
+For example, if you got a newer version of RHEL9 Qcow instead of RHEL9.4, please update `rhel9_kvm_image`. 
+
+```
+vim vars.yaml
+...
+rhel9_kvm_image: rhel-9.5-x86_64-kvm.qcow2
+... 
+```
+
+We are using ansible-vault to store RHEL activation keys and PullSecret to install OCP cluster. 
+```
+ansible-vault create vault.yaml
+New Vault password:
+Confirm New Vault password:
+
+org_id: XXXX
+activation_key: YYYYY
+pull_secret: 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ'
+```
+And we are all set to begin
 
 Lets start with setting up the Bare Metal Host. 
 ```
@@ -41,3 +59,19 @@ Once we have that ready, lets start setting up the Hub Cluster.
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hub_cluster.yaml   --ask-vault-pass
 Vault password:
 ```
+
+## CleanUp
+
+We got cleanup playbooks as well.  
+To cleanup all the Hub Cluster VMs and Helper VMs use `cleanup.yaml`. 
+
+```
+[root@base hcp-on-bm]# ansible-playbook cleanup.yaml
+```
+
+To cleanup only the Hub Cluster VMs use `cleanup-hub.yaml`. 
+```
+[root@base hcp-on-bm]# ansible-playbook cleanup-hub.yaml
+```
+
+
