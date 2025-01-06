@@ -8,7 +8,7 @@ This Repo will host the process for deploying a Hosted Control Plane cluster on 
 
 ## Getting Started
 
-Start with freshly installed RHEL9 OS on the BM. And make sure you have valid subscriptions and 
+Start with freshly installed RHEL9 OS on the BM. And make sure you have valid subscriptions. 
 
 ```
 subscription-manager register
@@ -29,3 +29,15 @@ cd hcp-on-bm
 ansible-playbook playbook.yaml
 ```
 
+Lets start with setting up the Bare Metal Host. 
+```
+[root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_bm_host.yaml   --ask-vault-pass
+Vault password:
+```
+The above playbook will create and configure a virtual machine named `helper` which will be hosting the DNS and HAProxy for the setup. 
+
+Once we have that ready, lets start setting up the Hub Cluster. 
+```
+[root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hub_cluster.yaml   --ask-vault-pass
+Vault password:
+```
