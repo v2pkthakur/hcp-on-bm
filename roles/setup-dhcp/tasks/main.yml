@@ -1,0 +1,14 @@
+---
+# tasks file for setup-dhcp
+- name: Install DHCP Server 
+  dnf:
+    name: dhcp-server
+    state: installed
+
+- name: Setup DHCP Config
+  ansible.builtin.template:
+    src: dhcpd.conf.j2
+    dest: "/etc/dhcp/dhcpd.conf
+
+
+    

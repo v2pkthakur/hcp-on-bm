@@ -15,10 +15,10 @@
       virsh undefine hub_bootstrap  && virsh destroy hub_bootstrap
       rm -f /var/lib/libvirt/images/hub/hub_bootstrap.qcow2 
 
-  - name: Destroy Helper VM
-    shell: |
-      virsh undefine helper && virsh destroy helper
-      rm -f /var/lib/libvirt/images/helper_disk.qcow2 
+      #  - name: Destroy Helper VM
+      #shell: |
+      #virsh undefine helper && virsh destroy helper
+      #rm -f /var/lib/libvirt/images/helper_disk.qcow2 
 
   - name: Cleanup SSH Know Hostss
     shell: |

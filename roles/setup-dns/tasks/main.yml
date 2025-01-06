@@ -10,6 +10,8 @@
 - name: Subscription
   shell:
     "subscription-manager register --org={{org_id }} --activationkey={{ activation_key}} --force" 
+  async: 2100
+  poll: 5 
 
 - name: Install DNS Packages
   dnf:
@@ -36,10 +38,20 @@
   notify:
     -  Restart_Named
     
-- name: Deploy "{{ hub_domain }}" zonefile
+- name: Deploy "{{ hub_domain }}" - Forward zonefile
   template:
     src: hub_domain.j2
     dest: "/var/named/{{ hub_domain }}.db"
+    owner: root
+    group: named
+    mode: u=rw,g=r,o=r
+  notify:
+    -  Restart_Named
+
+- name: Deploy "{{ hub_domain }}" - Reverse zonefile
+  template:
+    src: named-reverse.hub.j2
+    dest: "/var/named/named-reverse.{{ hub_domain }}.db" 
     owner: root
     group: named
     mode: u=rw,g=r,o=r

@@ -11,12 +11,11 @@ ip_list:
   hub_worker2: 35
   hub_worker3: 36
   hub_lb: 39
-  hcp_cluster1_master1: 41 
-  hcp_cluster1_master2: 42
-  hcp_cluster1_master3: 43
-  hcp_cluster1_worker1: 44
-  hcp_cluster1_worker2: 45
-  hcp_cluster1_worker3: 46
+  hcp_cluster1_worker1: 41
+  hcp_cluster1_worker2: 42
+  hcp_cluster1_worker3: 43
+  hcp_cluster2_worker1: 51
+  hcp_cluster2_worker2: 52
   hcp_cluster1_lb: 49
 
 helper_name: helper
@@ -53,6 +52,7 @@ basic_packages:
 dns_packages:
   - bind
   - bind-utils
+  - vim
 
 hub_domain: hub.mylab.com
 hosted_domain: hcp-cluster1.mylab.com

@@ -3,10 +3,8 @@
 
 - name: Install Basic Required Packages.
   yum:
-    name: "{{ item }}"
+    name: "{{ basic_packages }}"
     state: installed
-  with_items:
-  - "{{ basic_packages }}"
 
 # Once Packages are installed, lets start the Libvirt Service
 - name: Start Libvirtd Service
@@ -98,8 +96,24 @@
 
 - name: Attach New Interfaces
   shell: |
-    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:39
-    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:49
+    virsh domiflist helper | wc -l 
+  register: virt_int
+  tags:
+  - virt-int
+
+- name: Debug
+  debug: 
+    msg: "{{ virt_int }}"
+  tags:
+  - virt-int
+
+- name: Attach New Interfaces
+  shell: |
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:39 --persistent
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:49 --persistent
+  when: virt_int.stdout|int < 6 
+  tags:
+  - virt-int
     
 - name: Wait for the VM to boot
   shell: |

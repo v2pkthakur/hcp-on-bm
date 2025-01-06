@@ -27,4 +27,8 @@
   notify:
     - Restart_HAProxy
 
-
+- name: Start and enable the service 
+  service:
+    name: haproxy
+    state: running
+    enabled: true

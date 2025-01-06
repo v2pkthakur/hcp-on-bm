@@ -142,17 +142,7 @@ backend hub_apps_https_backend
     server master2 192.168.122.{{ip_list.hub_worker2}}:443 check 
     server master3 192.168.122.{{ip_list.hub_worker3}}:443 check 
  
-#------------------- HCP-Cluster1 API ---------------------------------------#
-frontend hcp_cluster1_api
-    bind  192.168.122.{{ip_list.hcp_cluster1_lb}}:6443
-    use_backend hcp_cluster1_backend
-
-backend hcp_cluster1_backend
-    balance roundrobin
-    server master1 192.168.122.{{ip_list.hcp_cluster1_master1}}:6443
-    server master2 192.168.122.{{ip_list.hcp_cluster1_master2}}:6443
-    server master3 192.168.122.{{ip_list.hcp_cluster1_master3}}:6443
-   
+  
 #------------------- HCP-Cluster1 APPS -------------------------------------#
 frontend hcp_cluster1_apps
     bind  192.168.122.{{ip_list.hcp_cluster1_lb}}:80

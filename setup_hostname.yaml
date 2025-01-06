@@ -1,0 +1,11 @@
+- name: Setup Hostname
+  hosts: hub_masters
+  become: true
+  tasks:
+  - name: Setup Hostname
+    shell:
+      hostnamectl set-hostname {{ inventory_hostname }}
+    retries: 10
+    delay: 5
+
+ 

@@ -58,7 +58,7 @@
 
 - name: Create Directory for Hub Cluster VMs
   file:
-    path: "{{hub_vm_folder}}"
+    path: "{{ hub_vm_folder }}"
     state: directory
     owner: root
     group: root
@@ -66,7 +66,7 @@
 
 - name: Delete Install Directory if exists
   file:
-    path: "{{ hub_install_folder}}"
+    path: "{{ hub_install_folder }}"
     state: absent
 
 - name: Create Directory for Hub Cluster VMs
@@ -116,7 +116,7 @@
     virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_bootstrap.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_bootstrap}} --name hub_bootstrap --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/bootstrap.ign" --dry-run --print-xml > /tmp/hub_bootstrap.xml
     virsh define /tmp/hub_bootstrap.xml && virsh start hub_bootstrap
 
-- name: Create Disk Image for Master1
+- name: Create Disk Image for Master Nodes
   shell: |
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_master1.qcow2 100G
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_master2.qcow2 100G
@@ -133,3 +133,29 @@
     virsh start hub_master1 
     virsh start hub_master2 
     virsh start hub_master3
+
+- name: Warning !!!
+  debug:
+    msg: "Please be aware that IPI on KVM with hostname is not working ATM. A workaround is to run a playbook to setup hostnames for masters. ansible-playbook -i inventory/hosts setup_hostname.yaml "
+      
+- name: Pause to run setup_hostname playbook.
+  pause:
+    prompt: "Please continute after your run setup-hostname playbook. Press ENTER to Continue. Ctrl+C to abort"
+
+- name: Create Disk Image for Worker Nodes
+  shell: |
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker1.qcow2 100G
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker2.qcow2 100G
+    qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker3.qcow2 100G
+
+- name: Defining the Worker nodes
+  shell: |
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_worker1}} --name hub_worker1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker1.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_worker2}} --name hub_worker2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker2.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_worker3}} --name hub_worker3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker3.xml
+    virsh define /tmp/hub_worker1.xml
+    virsh define /tmp/hub_worker2.xml
+    virsh define /tmp/hub_worker3.xml
+    virsh start hub_worker1 
+    virsh start hub_worker2 
+    virsh start hub_worker3

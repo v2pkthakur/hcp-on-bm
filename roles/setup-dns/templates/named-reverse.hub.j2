@@ -1,0 +1,17 @@
+$TTL    600
+@   IN SOA  helper.{{ hub_domain }}. admin.root.{{ hub_domain }}. (
+                     2019082200   ; serial
+                     1800  ; refresh
+                     1800  ; retry
+                     604800  ; expire
+                     86400 )    ; minimum
+
+@ 					IN NS 	helper.{{ hub_domain }}.
+{{ ip_list.helper_server }}   		IN PTR 		helper.{{ hub_domain }}.
+{{ ip_list.hub_master1 }} 		IN PTR 		hub-master1.{{ hub_domain }}.
+{{ ip_list.hub_master2 }} 		IN PTR 		hub-master2.{{ hub_domain }}.
+{{ ip_list.hub_master3 }} 		IN PTR 		hub-master3.{{ hub_domain }}.
+{{ ip_list.hub_worker1 }} 		IN PTR 		hub-worker1.{{ hub_domain }}.
+{{ ip_list.hub_worker2 }} 		IN PTR 		hub-worker2.{{ hub_domain }}.
+{{ ip_list.hub_worker3 }} 		IN PTR 		hub-worker3.{{ hub_domain }}.
+
