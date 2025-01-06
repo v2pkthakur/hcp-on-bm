@@ -30,5 +30,5 @@
 - name: Start and enable the service 
   service:
     name: haproxy
-    state: running
+    state: started
     enabled: true
