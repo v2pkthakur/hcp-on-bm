@@ -8,7 +8,8 @@ This Repo will host the process for deploying a Hosted Control Plane cluster on 
 
 ## PreRequisites
 
-Start with freshly installed RHEL9 OS on the BM. And make sure you have valid subscriptions. 
+Start with freshly installed RHEL 9.5 OS on the Bare Metal. If the host is not RHEL9.5, we recommend upgrading to RHEL9.5. 
+Make sure you have valid subscriptions. 
 
 ```
 subscription-manager register
