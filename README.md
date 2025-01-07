@@ -6,7 +6,7 @@ This Repo will host the process for deploying a Hosted Control Plane cluster on 
 ![High-Level-Arch](images/hcp-on-bm.png)
 
 
-## Getting Started
+## PreRequisites
 
 Start with freshly installed RHEL9 OS on the BM. And make sure you have valid subscriptions. 
 
@@ -34,7 +34,7 @@ vim vars.yaml
 rhel9_kvm_image: rhel-9.5-x86_64-kvm.qcow2
 ... 
 ```
-
+## Getting Started
 We are using ansible-vault to store RHEL activation keys and PullSecret to install OCP cluster. 
 ```
 ansible-vault create vault.yaml
