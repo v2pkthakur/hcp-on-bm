@@ -54,8 +54,15 @@ Vault password:
 ```
 The above playbook will create and configure a virtual machine named `helper` which will be hosting the DNS and HAProxy for the setup. 
 
-Once we have that ready, lets start setting up the Hub Cluster. 
+Once we have that ready, lets start setting up the Hub Cluster. The previous playbook generated a `~/.ssh/lab_rsa` key.
+Please update the `ssh_key` variable with the newly created SSHkey.  
+
 ```
+[root@base hcp-on-bm]# vim vars.yaml
+...
+ssh_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+...
+
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hub_cluster.yaml   --ask-vault-pass
 Vault password:
 ```
