@@ -3,20 +3,20 @@
 #   
 ip_list:
   helper_server: 21 
-  hub_bootstrap: 30
-  hub_master1: 31
-  hub_master2: 32
-  hub_master3: 33
-  hub_worker1: 34
-  hub_worker2: 35
-  hub_worker3: 36
-  hub_lb: 39
-  hcp_cluster1_worker1: 41
-  hcp_cluster1_worker2: 42
-  hcp_cluster1_worker3: 43
-  hcp_cluster2_worker1: 51
-  hcp_cluster2_worker2: 52
-  hcp_cluster1_lb: 49
+  bootstrap: 30
+  master1: 31
+  master2: 32
+  master3: 33
+  worker1: 34
+  worker2: 35
+  worker3: 36
+  hublb: 39
+  c1worker1: 41
+  c1worker2: 42
+  c1worker3: 43
+  c1lb: 49
+  c2worker1: 51
+  c2worker2: 52
 
 helper_name: helper
 helper_disk: helper_disk.qcow2

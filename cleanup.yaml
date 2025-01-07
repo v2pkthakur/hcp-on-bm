@@ -2,6 +2,13 @@
   hosts: localhost
   become: true
   tasks:
+  - name: Destroy Hub Workers
+    shell: |
+      virsh undefine hub_worker1 && virsh undefine hub_worker2 && virsh undefine hub_worker3
+      virsh destroy hub_worker1 && virsh destroy hub_worker2 && virsh destroy hub_worker3
+      rm -f /var/lib/libvirt/images/hub/hub_worker1.qcow2 
+      rm -f /var/lib/libvirt/images/hub/hub_worker2.qcow2 
+      rm -f /var/lib/libvirt/images/hub/hub_worker3.qcow2 
   - name: Destroy Hub Masters
     shell: |
       virsh undefine hub_master1 && virsh undefine hub_master2 && virsh undefine hub_master3

@@ -1,0 +1,21 @@
+<network>
+  <name>default</name>
+  <uuid>467059b1-29f1-4bfc-bb9a-1b5ae26d244c</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:c7:82:0c'/>
+  <dns>
+    <forwarder domain='{{ hub_domain }}' addr='192.168.122.{{ ip_list.helper_server}}'/>
+    <forwarder domain='{{ hosted_domain }}' addr='192.168.122.{{ ip_list.helper_server }}'/>
+    <forwarder domain='122.168.192.in-addr.arpa' addr='192.168.122.{{ ip_list.helper_server }}'/>
+  </dns>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+   </dhcp>
+  </ip>
+</network>
+

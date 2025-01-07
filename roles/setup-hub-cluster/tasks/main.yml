@@ -113,8 +113,12 @@
 
 - name: Defining the OCP Bootstrap nodes
   shell: |
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_bootstrap.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_bootstrap}} --name hub_bootstrap --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/bootstrap.ign" --dry-run --print-xml > /tmp/hub_bootstrap.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_bootstrap.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.bootstrap}} --name hub_bootstrap --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/bootstrap.ign" --dry-run --print-xml > /tmp/hub_bootstrap.xml
     virsh define /tmp/hub_bootstrap.xml && virsh start hub_bootstrap
+
+- name: Lets wait for 200 seconds for the bootstrap to be UP and ACTIVEG. 
+  ansible.builtin.wait_for:
+    timeout: 200
 
 - name: Create Disk Image for Master Nodes
   shell: |
@@ -124,9 +128,9 @@
 
 - name: Defining the Master nodes
   shell: |
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_master1}} --name hub_master1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master1.xml
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_master2}} --name hub_master2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master2.xml
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_master3}} --name hub_master3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master3.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.master1}} --name hub_master1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master1.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.master2}} --name hub_master2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master2.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_master3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.master3}} --name hub_master3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/master.ign" --dry-run --print-xml > /tmp/hub_master3.xml
     virsh define /tmp/hub_master1.xml
     virsh define /tmp/hub_master2.xml
     virsh define /tmp/hub_master3.xml
@@ -134,13 +138,9 @@
     virsh start hub_master2 
     virsh start hub_master3
 
-- name: Warning !!!
-  debug:
-    msg: "Please be aware that IPI on KVM with hostname is not working ATM. A workaround is to run a playbook to setup hostnames for masters. ansible-playbook -i inventory/hosts setup_hostname.yaml "
-      
-- name: Pause to run setup_hostname playbook.
-  pause:
-    prompt: "Please continute after your run setup-hostname playbook. Press ENTER to Continue. Ctrl+C to abort"
+- name: Lets wait for 300 seconds for the masters to be UP and RUNNING. 
+  ansible.builtin.wait_for:
+    timeout: 300
 
 - name: Create Disk Image for Worker Nodes
   shell: |
@@ -150,9 +150,9 @@
 
 - name: Defining the Worker nodes
   shell: |
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_worker1}} --name hub_worker1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker1.xml
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_worker2}} --name hub_worker2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker2.xml
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.hub_worker3}} --name hub_worker3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker3.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker1}} --name hub_worker1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker1.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker2}} --name hub_worker2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker2.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker3}} --name hub_worker3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker3.xml
     virsh define /tmp/hub_worker1.xml
     virsh define /tmp/hub_worker2.xml
     virsh define /tmp/hub_worker3.xml

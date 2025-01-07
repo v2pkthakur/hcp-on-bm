@@ -8,10 +8,10 @@ $TTL    600
 
 @ 					IN NS 	helper.{{ hub_domain }}.
 {{ ip_list.helper_server }}   		IN PTR 		helper.{{ hub_domain }}.
-{{ ip_list.hub_master1 }} 		IN PTR 		hub-master1.{{ hub_domain }}.
-{{ ip_list.hub_master2 }} 		IN PTR 		hub-master2.{{ hub_domain }}.
-{{ ip_list.hub_master3 }} 		IN PTR 		hub-master3.{{ hub_domain }}.
-{{ ip_list.hub_worker1 }} 		IN PTR 		hub-worker1.{{ hub_domain }}.
-{{ ip_list.hub_worker2 }} 		IN PTR 		hub-worker2.{{ hub_domain }}.
-{{ ip_list.hub_worker3 }} 		IN PTR 		hub-worker3.{{ hub_domain }}.
-
+{{ ip_list.bootstrap }} 		IN PTR 		bootstrap.{{ hub_domain }}.
+{{ ip_list.master1 }} 		IN PTR 		master1.{{ hub_domain }}.
+{{ ip_list.master2 }} 		IN PTR 		master2.{{ hub_domain }}.
+{{ ip_list.master3 }} 		IN PTR 		master3.{{ hub_domain }}.
+{{ ip_list.worker1 }} 		IN PTR 		worker1.{{ hub_domain }}.
+{{ ip_list.worker2 }} 		IN PTR 		worker2.{{ hub_domain }}.
+{{ ip_list.worker3 }} 		IN PTR 		worker3.{{ hub_domain }}.

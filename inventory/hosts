@@ -5,8 +5,11 @@
 192.168.122.21 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [hub_masters]
-
 master1.hub.mylab.com ansible_ssh_host=192.168.122.31 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=core
 master2.hub.mylab.com ansible_ssh_host=192.168.122.32 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=core
 master3.hub.mylab.com ansible_ssh_host=192.168.122.33 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=core
 
+[hub_workers]
+worker1.hub.mylab.com ansible_ssh_host=192.168.122.34 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=core
+worker2.hub.mylab.com ansible_ssh_host=192.168.122.35 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=core
+worker3.hub.mylab.com ansible_ssh_host=192.168.122.36 ansible_ssh_private_key_file=~/.ssh/lab_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=core

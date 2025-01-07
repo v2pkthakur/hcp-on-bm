@@ -1,5 +1,5 @@
 - name: Setup Hostname
-  hosts: hub_masters
+  hosts: hub_workers
   become: true
   tasks:
   - name: Setup Hostname
@@ -8,4 +8,4 @@
     async: 2100
     poll: 5 
 
-      # Solution as mentioned in https://access.redhat.com/solutions/5676801.  
+ 
