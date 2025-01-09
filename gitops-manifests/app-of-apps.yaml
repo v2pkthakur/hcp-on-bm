@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-apps
+  namespace: openshift-gitops
+spec:
+  destination:
+    name: in-cluster
+  project: default
+  source:
+    repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
+    targetRevision: main
+    path: gitops-manifests/
+  syncPolicy:
+    automated: {}

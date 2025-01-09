@@ -7,3 +7,10 @@
   tasks: 
   - ansible.builtin.import_role:
       name: setup-hub-cluster
+
+  - ansible.builtin.import_role:
+      name: setup-gitops
+    environment:
+      KUBECONFIG: "{{ hub_install_folder }}/auth/kubeconfig"
+    tags:
+      - gitops    

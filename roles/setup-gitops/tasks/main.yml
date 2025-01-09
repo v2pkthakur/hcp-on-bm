@@ -1,0 +1,26 @@
+---
+# tasks file for setup-gitops
+# Create the Namespace
+- name: Check Namespace
+  shell: oc get projects | grep openshift-gitops-operator
+  register: projects_out
+
+- name: Create Namespace
+  shell: oc create ns openshift-gitops-operator
+  when: "'Active' not in projects_out.stdout"
+
+- name: Check OG
+  shell: oc get og -A | grep openshift-gitops-operator
+  register: og_out
+
+- name: Create OperatorGroup
+  shell: oc create -f "{{ role_path }}/files/operatorGroup.yaml"
+  when: "'openshift-gitops-operator' not in og_out.stdout"
+
+- name: Check Subs
+  shell: oc get subscriptions -A | grep openshift-gitops-operator
+  register: sub_out
+
+- name: Create Subscription for Openshift-Gitops 
+  shell: oc create -f "{{ role_path }}/files/subscription.yaml"
+  when: "'openshift-gitops-operator' not in sub_out.stdout"

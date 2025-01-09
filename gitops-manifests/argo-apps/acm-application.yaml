@@ -1,0 +1,18 @@
+# ACM Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: acm-deploy
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
+    targetRevision: main
+    path: gitops-manifests/acm
+  syncPolicy:
+    automated: {}
+      selfHeal: true
+      prune: true
+  destination: 
+    name: in-cluster
