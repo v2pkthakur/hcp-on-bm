@@ -12,7 +12,5 @@ spec:
     path: gitops-manifests/acm
   syncPolicy:
     automated: {}
-      selfHeal: true
-      prune: true
   destination: 
     name: in-cluster
