@@ -147,9 +147,9 @@
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker1.qcow2 100G
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker2.qcow2 100G
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker3.qcow2 100G
-    qemu-img create -f qcow2 -F qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker1.qcow2 500G
-    qemu-img create -f qcow2 -F qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker2.qcow2 500G
-    qemu-img create -f qcow2 -F qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker3.qcow2 500G
+    qemu-img create -f qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker1.qcow2 500G
+    qemu-img create -f qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker2.qcow2 500G
+    qemu-img create -f qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker3.qcow2 500G
 
 - name: Defining the Worker nodes
   shell: |
