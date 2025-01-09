@@ -11,12 +11,8 @@ spec:
     targetRevision: main
     path: gitops-manifests/acm
   syncPolicy:
-<<<<<<< HEAD
-    automated: {}
-=======
     automated:
       prune: true
       selfHeal: true
->>>>>>> afdf6e9 (Fixed app of app)
   destination: 
-    name: in-cluster
+    server: https://kubernetes.default.svc 
