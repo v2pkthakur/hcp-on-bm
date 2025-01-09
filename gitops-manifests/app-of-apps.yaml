@@ -10,6 +10,6 @@ spec:
   source:
     repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
     targetRevision: main
-    path: gitops-manifests/
+    path: gitops-manifests/argo-apps
   syncPolicy:
     automated: {}
