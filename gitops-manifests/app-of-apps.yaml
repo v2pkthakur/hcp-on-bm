@@ -5,11 +5,13 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    name: in-cluster
+    server: https://kubernetes.default.svc
   project: default
   source:
+    path: gitops-manifests/argo-apps
     repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
     targetRevision: main
-    path: gitops-manifests/argo-apps
   syncPolicy:
-    automated: {}
+    automated:
+      prune: true
+      selfHeal: true
