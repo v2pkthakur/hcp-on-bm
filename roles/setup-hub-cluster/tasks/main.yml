@@ -147,15 +147,38 @@
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker1.qcow2 100G
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker2.qcow2 100G
     qemu-img create -f qcow2 -F qcow2 -b {{ download_dir }}/rhcos-{{ocp_major_version}}.{{ocp_minor_version}}-x86_64-qemu.x86_64.qcow2  {{ hub_vm_folder }}/hub_worker3.qcow2 100G
+    qemu-img create -f qcow2 -F qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker1.qcow2 500G
+    qemu-img create -f qcow2 -F qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker2.qcow2 500G
+    qemu-img create -f qcow2 -F qcow2 -o preallocation=metadata {{ hub_vm_folder }}/storage_worker3.qcow2 500G
 
 - name: Defining the Worker nodes
   shell: |
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker1}} --name hub_worker1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker1.xml
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker2}} --name hub_worker2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker2.xml
-    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker3.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker3}} --name hub_worker3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker3.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --disk-path={{ hub_vm_folder }}/storage_worker1.qcow2   --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker1}} --name hub_worker1 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker1.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --disk-path={{ hub_vm_folder }}/storage_worker1.qcow2   --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker2}} --name hub_worker2 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker2.xml
+    virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_worker3.qcow2,device=disk,bus=virtio,format=qcow2 --disk-path={{ hub_vm_folder }}/storage_worker1.qcow2  --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.worker3}} --name hub_worker3 --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/worker.ign" --dry-run --print-xml > /tmp/hub_worker3.xml
     virsh define /tmp/hub_worker1.xml
     virsh define /tmp/hub_worker2.xml
     virsh define /tmp/hub_worker3.xml
     virsh start hub_worker1 
     virsh start hub_worker2 
     virsh start hub_worker3
+
+- name: Lets wait for 300 seconds for the workers to be UP and RUNNING. 
+  ansible.builtin.wait_for:
+    timeout: 300
+
+- name: Approve all pendign CSR for Worker nodes
+  shell: |
+    export KUBECONFIG={{ hub_install_folder }}/auth/kubeconfig
+    for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done  
+    sleep 120
+    for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done 
+
+- name: Waiting for cluster Bootstrap to finish
+  shell: |
+    openshift-install --dir={{ hub_install_folder }}  wait-for bootstrap-complete --log-level=info
+
+- name: Deleting Bootstrap VM
+  community.libvirt.virt:
+    name: hub_bootstrap
+    state: destroyed

@@ -1,0 +1,58 @@
+---
+# tasks file for setup-tftp
+- name: Installing HTTPD/TFTP Packages
+  yum:
+    name:
+    - httpd
+    - tftp-server
+    - syslinux-tftpboot
+    - syslinux
+    state: present
+
+
+- name: Copying TFTP related file
+  copy:
+    dest: /var/lib/tftpboot/
+    src: /tftpboot/
+    remote_src: true
+
+- name: Create images Directory at /var/lib/tftpboot/
+  file:
+    path: /var/lib/tftpboot/images/
+    state: directory
+    mode: '0755'
+
+- name: Create bootp Directory at /var/www/html
+  file:
+    path: /var/www/html/bootp/
+    state: directory
+    mode: '0755'
+
+- name: Create pxelinux.cfg Directory at /var/lib/tftpboot/
+  file:
+    path: /var/lib/tftpboot/pxelinux.cfg/
+    state: directory 
+    mode: '0755'
+
+- name: Creating /var/lib/tftpboot/pxelinux.cfg/default file
+  template:
+    dest: /var/lib/tftpboot/pxelinux.cfg/default
+    src: default.j2
+
+- name: Change Port to 8080
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf 
+    regexp: "^Listen 80"
+    line: "Listen 8080"
+
+- name: Start HTTPD Service
+  systemd:
+    state: started
+    name: httpd
+    enabled: yes
+
+- name: Start TFTP Service
+  systemd:
+    state: started
+    name: tftp.socket
+    enabled: yes
