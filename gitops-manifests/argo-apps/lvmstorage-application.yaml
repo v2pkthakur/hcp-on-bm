@@ -1,0 +1,18 @@
+# LVM Storage Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lvm-storage
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
+    targetRevision: main
+    path: gitops-manifests/lvm-storage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  destination: 
+    server: https://kubernetes.default.svc 
