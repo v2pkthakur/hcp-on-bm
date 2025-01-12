@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-apps
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: gitops-manifests/argo-apps
+    repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

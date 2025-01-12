@@ -3,6 +3,7 @@
 # Create the Namespace
 - name: Check Namespace
   shell: oc get projects | grep openshift-gitops-operator
+  ignore_errors: yes
   register: projects_out
 
 - name: Create Namespace
@@ -11,6 +12,7 @@
 
 - name: Check OG
   shell: oc get og -A | grep openshift-gitops-operator
+  ignore_errors: yes
   register: og_out
 
 - name: Create OperatorGroup
@@ -19,8 +21,13 @@
 
 - name: Check Subs
   shell: oc get subscriptions -A | grep openshift-gitops-operator
+  ignore_errors: yes
   register: sub_out
 
 - name: Create Subscription for Openshift-Gitops 
   shell: oc create -f "{{ role_path }}/files/subscription.yaml"
   when: "'openshift-gitops-operator' not in sub_out.stdout"
+
+- name: Define App of Apps
+  shell: oc create -f "{{ role_path }}/files/app-of-apps.yaml"
+

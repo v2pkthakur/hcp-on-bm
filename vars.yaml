@@ -56,7 +56,7 @@ dns_packages:
 
 hub_domain: hub.mylab.com
 hosted_domain: hcp-cluster1.mylab.com
-hosted_domain: hcp-cluster2.mylab.com
+hosted_domain2: hcp-cluster2.mylab.com
 
 
 
