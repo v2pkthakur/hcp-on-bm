@@ -4,6 +4,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "4"
   name: my-lvmcluster
+  namespace: openshift-storage
 spec:
   storage:
     deviceClasses:
