@@ -8,4 +8,4 @@ label linux
   menu label CoreOS Hosted Cluster PXE
   menu default
   initrd images/initrd.img
-  kernel images/vmlinuz coreos.live.rootfs_url=http://{{ip_list.helper_server}}:8080/bootp/rootfs random.trust_cpu=on rd.luks.options=discard ignition.firstboot ignition.platform.id=metal console=tty1 console=ttyS1,115200n8 coreos.inst.persistent-kargs="console=tty1 console=ttyS1,115200n8"
+  kernel images/vmlinuz coreos.live.rootfs_url=http://192.168.122.{{ip_list.helper_server}}:8080/bootp/rootfs.img random.trust_cpu=on rd.luks.options=discard ignition.firstboot ignition.platform.id=metal console=tty1 console=ttyS1,115200n8 coreos.inst.persistent-kargs="console=tty1 console=ttyS1,115200n8"
