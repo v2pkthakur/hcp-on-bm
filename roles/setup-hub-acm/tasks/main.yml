@@ -15,3 +15,16 @@
     oc apply -f "{{ role_path }}/files/lvm-storage/03-subscription.yaml"
     sleep 90
     oc apply -f "{{ role_path }}/files/lvm-storage/04-lvm-cluster.yaml"
+
+
+- name: Setup MetalLB 
+  shell: |
+    oc apply -f "{{ role_path }}/files/metal-lb/01-namespace.yaml"
+    oc apply -f "{{ role_path }}/files/metal-lb/02-operatorGroup.yaml"
+    oc apply -f "{{ role_path }}/files/metal-lb/03-subscription.yaml"
+    sleep 90
+    oc apply -f "{{ role_path }}/files/metal-lb/04-metalLB.yaml"
+    oc apply -f "{{ role_path }}/files/metal-lb/05-ip-pool.yaml"
+    oc apply -f "{{ role_path }}/files/metal-lb/06-L2Advertisement.yaml"
+
+

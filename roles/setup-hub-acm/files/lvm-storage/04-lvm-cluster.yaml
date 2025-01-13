@@ -4,6 +4,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "10"
   name: my-lvmcluster
+  namespace: openshift-storage
 spec:
   storage:
     deviceClasses:
@@ -16,10 +17,10 @@ spec:
           - key: storage
             operator: In
             values:
-            - true
+            - "true"
       deviceSelector: 
         paths:
-        - vdb 
+        - /dev/vdb 
         forceWipeDevicesAndDestroyAllData: true
       thinPoolConfig:
         name: thin-pool-1

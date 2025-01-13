@@ -1,0 +1,10 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: hcp-ip-pool
+spec:
+  addresses:
+  - 192.168.122.60-192.168.122.69
+  autoAssign: true
+  avoidBuggyIPs: true
