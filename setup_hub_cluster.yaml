@@ -14,3 +14,10 @@
       KUBECONFIG: "{{ hub_install_folder }}/auth/kubeconfig"
     tags:
       - gitops    
+
+  - ansible.builtin.import_role:
+      name: setup-hub-acm
+    environment:
+      KUBECONFIG: "{{ hub_install_folder }}/auth/kubeconfig"
+    tags:
+      - acm    

@@ -11,6 +11,8 @@ spec:
     path: gitops-manifests/argo-apps
     repoURL: https://github.com/v2pkthakur/hcp-on-bm.git
     targetRevision: main
+    directory:
+      recurse: false
   syncPolicy:
     automated:
       prune: true

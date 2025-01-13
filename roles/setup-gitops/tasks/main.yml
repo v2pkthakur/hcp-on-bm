@@ -28,6 +28,13 @@
   shell: oc create -f "{{ role_path }}/files/subscription.yaml"
   when: "'openshift-gitops-operator' not in sub_out.stdout"
 
+- name: Lets wait for 200 seconds for the workers to be UP and RUNNING. 
+  ansible.builtin.wait_for:
+    timeout: 200
+
+- name: Allow openshift-gitops to deploy in open-cluster-management
+  shell: oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller 
+
 - name: Define App of Apps
   shell: oc create -f "{{ role_path }}/files/app-of-apps.yaml"
 
