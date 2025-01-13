@@ -178,6 +178,7 @@
 - name: Approve all pendign CSR for Worker nodes
   shell: |
     export KUBECONFIG={{ hub_install_folder }}/auth/kubeconfig
+    sleep 120 
     for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done  
     sleep 120
     for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done 
@@ -195,7 +196,7 @@
 - name: Approve all pendign CSR for Worker nodes - If still PENDING
   shell: |
     export KUBECONFIG={{ hub_install_folder }}/auth/kubeconfig
-    sleep 60 
+    sleep 120 
     for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done  
     sleep 120
     for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done 

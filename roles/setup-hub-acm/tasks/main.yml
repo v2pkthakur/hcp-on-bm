@@ -5,7 +5,7 @@
     oc apply -f "{{ role_path }}/files/acm/01-namespace.yaml"
     oc apply -f "{{ role_path }}/files/acm/02-acm-operatorgroup.yaml"
     oc apply -f "{{ role_path }}/files/acm/03-subscription.yaml"
-    sleep 90
+    sleep 180s
     oc apply -f "{{ role_path }}/files/acm/04-multicluster-hub.yaml"
 
 - name: Setup LVM Storage
@@ -13,7 +13,7 @@
     oc apply -f "{{ role_path }}/files/lvm-storage/01-namespace.yaml"
     oc apply -f "{{ role_path }}/files/lvm-storage/02-operatorGroup.yaml"
     oc apply -f "{{ role_path }}/files/lvm-storage/03-subscription.yaml"
-    sleep 90
+    sleep 180s
     oc apply -f "{{ role_path }}/files/lvm-storage/04-lvm-cluster.yaml"
 
 
@@ -22,7 +22,7 @@
     oc apply -f "{{ role_path }}/files/metal-lb/01-namespace.yaml"
     oc apply -f "{{ role_path }}/files/metal-lb/02-operatorGroup.yaml"
     oc apply -f "{{ role_path }}/files/metal-lb/03-subscription.yaml"
-    sleep 90
+    sleep 180s
     oc apply -f "{{ role_path }}/files/metal-lb/04-metalLB.yaml"
     oc apply -f "{{ role_path }}/files/metal-lb/05-ip-pool.yaml"
     oc apply -f "{{ role_path }}/files/metal-lb/06-L2Advertisement.yaml"
