@@ -77,21 +77,6 @@
   tags:
   - virtnet
 
-- name: Check Network status 
-  shell: virsh net-dumpxml default | grep "ip='192.168.122.21'"
-  register: virt_net_status
-  ignore_errors: yes
-
-- name: Setup the DHCP Network 
-  shell: | 
-    virsh net-update --network "default" add-last ip-dhcp-host \
-    --xml "<host mac='52:54:00:e2:54:{{ item.value }}' name='{{ item.key }}.{{ hub_domain }}' ip='192.168.122.{{ item.value }}' />" --live --config
-  with_dict:
-  - "{{ ip_list }}"
-  when: virt_net_status.stdout == ''
-  tags:
-  - virtnet
-  
 
 - name: Check if VM is running using virsh
   shell: "virsh dominfo helper| grep 'State' | awk '{print $2}'"
