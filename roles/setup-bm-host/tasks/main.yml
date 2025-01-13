@@ -91,7 +91,7 @@
   tags:
   - virt
 
-- name: Attach New Interfaces
+- name: List Interfaces on Helper VM
   shell: |
     virsh domiflist helper | wc -l 
   register: virt_int

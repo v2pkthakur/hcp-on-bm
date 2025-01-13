@@ -124,9 +124,9 @@
     virt-install --ram 16384 --vcpus 4 --osinfo rhel9.0  --disk path={{ hub_vm_folder }}/hub_bootstrap.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ip_list.bootstrap}} --name hub_bootstrap --cpu host-passthrough --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file={{ hub_install_folder }}/bootstrap.ign" --dry-run --print-xml > /tmp/hub_bootstrap.xml
     virsh define /tmp/hub_bootstrap.xml && virsh start hub_bootstrap
 
-- name: Lets wait for 200 seconds for the bootstrap to be UP and ACTIVEG. 
+- name: Lets wait for 300 seconds for the bootstrap to be UP and ACTIVEG. 
   ansible.builtin.wait_for:
-    timeout: 200
+    timeout: 300
 
 - name: Create Disk Image for Master Nodes
   shell: |
