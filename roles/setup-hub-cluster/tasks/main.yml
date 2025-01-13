@@ -77,6 +77,14 @@
     group: root
     mode: '0755'
 
+- name: Get SSH Key
+  shell: cat ~/.ssh/lab_rsa.pub
+  register: ssh_out
+
+- name: Setting booleans using complex argument style
+  ansible.builtin.set_fact:
+    ssh_key: "{{ ssh_out.stdout }}"
+
 # Copy Install-Config
 - name: Copying install-config.yaml to install dir
   template:
