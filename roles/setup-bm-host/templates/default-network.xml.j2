@@ -19,7 +19,7 @@
      {% for key,value in ip_list.items() %}
      <host mac='52:54:00:e2:54:{{ value }}' name='{{ key }}.hub.mylab.com' ip='192.168.122.{{ value }}'/>
      {% endfor %}
-     <bootp file='pxelinux.0' server='{{ ip_list.helper_server }}'/>
+     <bootp file='pxelinux.0' server='192.168.122.{{ ip_list.helper_server }}'/>
    </dhcp>
   </ip>
 </network>
