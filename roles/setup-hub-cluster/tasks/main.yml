@@ -171,16 +171,16 @@
     virsh start hub_worker2 
     virsh start hub_worker3
 
-- name: Lets wait for 420 seconds for the workers to be UP and RUNNING. 
+- name: Lets wait for 600 seconds for the workers to be UP and RUNNING. 
   ansible.builtin.wait_for:
-    timeout: 420
+    timeout: 600
 
 - name: Approve all pendign CSR for Worker nodes
   shell: |
     export KUBECONFIG={{ hub_install_folder }}/auth/kubeconfig
-    sleep 120 
+    sleep 180 
     for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done  
-    sleep 120
+    sleep 180
     for i in `oc get csr| grep Pending | awk '{print $1}'`; do oc adm certificate approve $i; done 
 
 - name: Waiting for cluster Bootstrap to finish

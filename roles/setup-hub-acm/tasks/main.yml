@@ -1,5 +1,9 @@
 ---
 # tasks file for setup-hub-acm
+- name: Lets wait for 120 seconds for the workers to settle
+  ansible.builtin.wait_for:
+    timeout: 120
+
 - name: Deploy ACM Operator
   shell: |
     oc apply -f "{{ role_path }}/files/acm/01-namespace.yaml"
