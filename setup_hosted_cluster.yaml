@@ -1,0 +1,10 @@
+- name: Setting Up Hosted Cluster
+  hosts: localhost
+  become: true
+  vars_files:
+    - vars.yaml
+    - vault.yaml 
+  tasks: 
+  - ansible.builtin.import_role:
+      name: setup-hosted-cluster
+

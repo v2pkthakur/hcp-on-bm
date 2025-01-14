@@ -109,3 +109,7 @@
 - name: Wait for the VM to boot
   shell: |
     sleep 30s
+
+- name: Install VBMC 
+  shell: pip install virtualbmc
+

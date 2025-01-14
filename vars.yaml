@@ -17,6 +17,7 @@ ip_list:
   c1lb: 49
   c2worker1: 51
   c2worker2: 52
+  c2worker3: 53
 
 helper_name: helper
 helper_disk: helper_disk.qcow2
@@ -47,6 +48,7 @@ basic_packages:
   - python-setuptools
   - tigervnc-server
   - tigervnc
+  - python3-pip
 
 ##  Variables required by DNS Role 
 dns_packages:
@@ -68,9 +70,3 @@ hub_vm_folder: /var/lib/libvirt/images/hub
 hub_install_folder: /var/lib/libvirt/images/hub_install
 hub_name: hub
 base_domain: mylab.com
-hub_master_vms:
-  - master1
-  - master2
-  - master3
-hub_worker_vms:
-  - 

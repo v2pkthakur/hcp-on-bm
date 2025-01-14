@@ -68,6 +68,16 @@
   notify:
     -  Restart_Named
     
+- name: Deploy "{{ hosted_domain2 }}" zonefile
+  template:
+    src: hosted_domain2.j2
+    dest: "/var/named/{{ hosted_domain2 }}.db"
+    owner: root
+    group: named
+    mode: u=rw,g=r,o=r
+  notify:
+    -  Restart_Named
+
 - name: Start NAmed Service
   service:
     name: named
