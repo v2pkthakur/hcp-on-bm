@@ -100,8 +100,9 @@
 
 - name: Attach New Interfaces
   shell: |
-    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:39 --persistent
-    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:49 --persistent
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:{{ ip_list.hublb }} --persistent
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:{{ ip_list.c1lb }} --persistent
+    virsh attach-interface --type bridge --source virbr0  --model virtio helper --mac 52:54:00:e2:54:{{ ip_list.c2lb }} --persistent
   when: virt_int.stdout|int < 6 
   tags:
   - virt-int

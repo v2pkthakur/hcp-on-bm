@@ -147,8 +147,10 @@ backend hub_apps_https_backend
 frontend hcp_cluster1_apps
     bind  192.168.122.{{ip_list.c1lb}}:80
     use_backend hcp_cluster1_apps_backend
+    mode tcp 
 
 backend hcp_cluster1_apps_backend
+    mode tcp 
     balance roundrobin
     server worker1 192.168.122.{{ip_list.c1worker1}}:80 check
     server worker2 192.168.122.{{ip_list.c1worker2}}:80 check 
@@ -158,9 +160,37 @@ backend hcp_cluster1_apps_backend
 frontend hcp_cluster1_apps_https
     bind  192.168.122.{{ip_list.c1lb}}:443
     use_backend hcp_cluster1_apps_https_backend
+    mode tcp 
 
 backend hcp_cluster1_apps_https_backend
     balance roundrobin
+    mode tcp 
     server worker1 192.168.122.{{ip_list.c1worker1}}:443 check
     server worker2 192.168.122.{{ip_list.c1worker2}}:443 check 
     server worker3 192.168.122.{{ip_list.c1worker3}}:443 check 
+#
+#------------------- HCP-Cluster2 APPS -------------------------------------#
+frontend hcp_cluster2_apps
+    bind  192.168.122.{{ip_list.c2lb}}:80
+    use_backend hcp_cluster2_apps_backend
+    mode tcp 
+
+backend hcp_cluster2_apps_backend
+    mode tcp 
+    balance roundrobin
+    server worker1 192.168.122.{{ip_list.c2worker1}}:80 check
+    server worker2 192.168.122.{{ip_list.c2worker2}}:80 check 
+    server worker3 192.168.122.{{ip_list.c2worker3}}:80 check 
+
+#------------------- HCP-Cluster1 APPS - HTTPS  ----------------------------#
+frontend hcp_cluster2_apps_https
+    bind  192.168.122.{{ip_list.c2lb}}:443
+    use_backend hcp_cluster2_apps_https_backend
+    mode tcp 
+
+backend hcp_cluster2_apps_https_backend
+    balance roundrobin
+    mode tcp 
+    server worker1 192.168.122.{{ip_list.c2worker1}}:443 check
+    server worker2 192.168.122.{{ip_list.c2worker2}}:443 check 
+    server worker3 192.168.122.{{ip_list.c2worker3}}:443 check 

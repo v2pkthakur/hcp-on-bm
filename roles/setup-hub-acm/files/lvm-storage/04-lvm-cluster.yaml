@@ -1,8 +1,6 @@
 apiVersion: lvm.topolvm.io/v1alpha1
 kind: LVMCluster
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "10"
   name: my-lvmcluster
   namespace: openshift-storage
 spec:
