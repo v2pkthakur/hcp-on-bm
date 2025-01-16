@@ -1,7 +1,9 @@
-# hcp-on-bm
-HCP on BareMetaal
+# Hosted Control Planes on a Single BareMetal. 
+HCP on BareMetal
 
 This Repo will host the process for deploying a Hosted Control Plane cluster on a Hub Cluster installed on a single bare metal node. 
+We are leveraging RHEL9 as our operating system and KVM/Libvirt as our choice of hypervisor to host/simulate actual clusters. 
+
 
 ![High-Level-Arch](images/hcp-on-bm.png)
 
