@@ -6,23 +6,11 @@ metadata:
 spec:
   storage:
     deviceClasses:
-    - name: vg1
-      fstype: ext4 
-      default: true
-      nodeSelector: 
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: storage
-            operator: In
-            values:
-            - "true"
-      deviceSelector: 
-        paths:
-        - /dev/vdb 
-        forceWipeDevicesAndDestroyAllData: true
-      thinPoolConfig:
-        name: thin-pool-1
-        sizePercent: 90 
-        overprovisionRatio: 10
-        chunkSize: 128Ki 
-        chunkSizeCalculationPolicy: Static 
+      - fstype: xfs
+        thinPoolConfig:
+          chunkSizeCalculationPolicy: Static
+          sizePercent: 90
+          name: thin-pool-1
+          overprovisionRatio: 10
+        default: true
+        name: vg1
