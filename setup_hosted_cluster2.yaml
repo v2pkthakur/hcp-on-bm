@@ -1,0 +1,24 @@
+- name: Setting Up Hosted Cluster
+  hosts: localhost
+  become: true
+  vars_files:
+    - vars.yaml
+  tasks: 
+  - name: Create Directory for Hosted Cluster VMs
+    file:
+      path: "{{hosted_cluster2_vm_folder}}"
+      state: directory
+
+  - name: Define Disks for Hosted Cluster
+    shell: | 
+    qemu-img create -f qcow2 -o preallocation=metadata {{ hosted_cluster2_vm_folder }}/c2_worker1.qcow2 120G
+    qemu-img create -f qcow2 -o preallocation=metadata {{ hosted_cluster2_vm_folder }}/c2_worker2.qcow2 120G
+  
+  - name: Deploy Workers for Hosted Cluster 
+    shell: |
+      virt-install --ram {{ hosted_cluster2_memory }} --vcpus {{ hosted_cluster2_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster2_vm_folder }}/c2_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c2worker1 }} --name c2_worker1 --cpu host-passthrough
+      virt-install --ram {{ hosted_cluster2_memory }} --vcpus {{ hosted_cluster2_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster2_vm_folder }}/c2_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c2worker2 }} --name c2_worker2 --cpu host-passthrough
+
+
+
+

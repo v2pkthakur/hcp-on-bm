@@ -73,10 +73,13 @@ hub_install_folder: /var/lib/libvirt/images/hub_install
 hub_name: hub
 base_domain: mylab.com
 
-## Variable for Hosted Clusters
+## Variable for Hosted Cluster1
 hosted_cluster_cpu: 4
 hosted_cluster_memory: 8192
 hosted_cluster_vm_folder: /var/lib/libvirt/images/hosted_cluster
+
+
+## Variables for Hosted Cluster1
 hosted_cluster2_cpu: 4
 hosted_cluster2_memory: 8192
 hosted_cluster2_vm_folder: /var/lib/libvirt/images/hosted_cluster2

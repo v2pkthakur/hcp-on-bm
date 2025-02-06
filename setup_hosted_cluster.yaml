@@ -17,8 +17,8 @@
   
   - name: Deploy Workers for Hosted Cluster 
     shell: |
-      virt-install --ram {{ hosted_cluster_memory }} --vcpus {{ hosted_cluster_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster_vm_folder }}/c1_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c1worker1 }} --name c1_worker1} --cpu host-passthrough
-      virt-install --ram {{ hosted_cluster_memory }} --vcpus {{ hosted_cluster_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster_vm_folder }}/c1_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c1worker2 }} --name c1_worker2} --cpu host-passthrough
+      virt-install --ram {{ hosted_cluster_memory }} --vcpus {{ hosted_cluster_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster_vm_folder }}/c1_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c1worker1 }} --name c1_worker1 --cpu host-passthrough
+      virt-install --ram {{ hosted_cluster_memory }} --vcpus {{ hosted_cluster_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster_vm_folder }}/c1_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c1worker2 }} --name c1_worker2 --cpu host-passthrough
 
 
 
