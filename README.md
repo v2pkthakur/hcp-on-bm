@@ -50,6 +50,8 @@ pull_secret: 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ'
 ```
 And we are all set to begin
 
+### Setup Bare Metal Host
+
 Lets start with setting up the Bare Metal Host. 
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_bm_host.yaml   --ask-vault-pass
@@ -57,10 +59,25 @@ Vault password:
 ```
 The above playbook will create and configure a virtual machine named `helper` which will be hosting the DNS and HAProxy for the setup. 
 
+### Setup Hub Cluster
+
 Once we have that ready, let's start setting up the Hub Cluster.  
 
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hub_cluster.yaml   --ask-vault-pass
+Vault password:
+```
+
+### Provision Hosted Cluster
+```
+[root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hosted_cluster.yaml   --ask-vault-pass
+Vault password:
+```
+
+
+### Provision Hostes Cluster2 
+```
+[root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hosted_cluster2.yaml  --ask-vault-pass
 Vault password:
 ```
 
