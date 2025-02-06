@@ -75,7 +75,7 @@ Vault password:
 ```
 
 
-### Provision Hostes Cluster2 
+### Provision Hosted Cluster2 
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hosted_cluster2.yaml  --ask-vault-pass
 Vault password:
