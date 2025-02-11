@@ -55,9 +55,9 @@ And we are all set to begin
 
 Lets start with setting up the Bare Metal Host. 
 
-![Setup-BareMetal-Host](images/video-coming-soon.jpeg)
+<img src="images/video-coming-soon.jpeg" alt="Setup-BareMetal-Host" width="600" height="400">  
 
-
+  
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_bm_host.yaml   --ask-vault-pass
 Vault password:
@@ -68,12 +68,17 @@ The above playbook will create and configure a virtual machine named `helper` wh
 
 Once we have that ready, let's start setting up the Hub Cluster.  
 
+<img src="images/video-coming-soon.jpeg" alt="Setup-Hub-Cluster" width="600" height="400">  
+
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hub_cluster.yaml   --ask-vault-pass
 Vault password:
 ```
 
 ### Provision Hosted Cluster
+
+<img src="images/video-coming-soon.jpeg" alt="Setup-Hosted-Cluster" width="600" height="400">  
+
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hosted_cluster.yaml   --ask-vault-pass
 Vault password:
@@ -81,6 +86,9 @@ Vault password:
 
 
 ### Provision Hosted Cluster2 
+
+<img src="images/video-coming-soon.jpeg" alt="Setup-Hosted-Cluster2" width="600" height="400">  
+
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_hosted_cluster2.yaml  --ask-vault-pass
 Vault password:
