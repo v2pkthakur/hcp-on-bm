@@ -19,6 +19,17 @@
       virt-install --ram {{ hosted_cluster2_memory }} --vcpus {{ hosted_cluster2_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster2_vm_folder }}/c2_worker1.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c2worker1 }} --name c2_worker1 --cpu host-passthrough
       virt-install --ram {{ hosted_cluster2_memory }} --vcpus {{ hosted_cluster2_cpu }} --os-variant rhel9 --cdrom {{ discovery_image_url }} --disk path={{ hosted_cluster2_vm_folder }}/c2_worker2.qcow2,device=disk,bus=virtio,format=qcow2 --noautoconsole --vnc --network network:default,mac=52:54:00:e2:54:{{ ip_list.c2worker2 }} --name c2_worker2 --cpu host-passthrough
 
+  - name: Install VirtualBMC
+    dnf: 
+      name: python-virtualbmc
+      state: installed
 
 
+  - name: Define VBMC Interface for HCP Cluster2 Worker Nodes
+    shell: |
+      vbmc add c2_worker1 --address {{ ip_list.c2vbmc }}  --port 6080 --username admin --password password  --libvirt-uri qemu:///system 
+      vbmc add c2_worker2 --address {{ ip_list.c2vbmc }}  --port 6081 --username admin --password password  --libvirt-uri qemu:///system 
+      vbmc start c2_worker1 
+      vbmc start c2_worker2
 
+     

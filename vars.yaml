@@ -19,6 +19,7 @@ ip_list:
   c2worker2: 52
   c2worker3: 53
   c2lb: 59
+  c2vbmc: 71
 
 helper_name: helper
 helper_disk: helper_disk.qcow2
@@ -83,4 +84,3 @@ hosted_cluster_vm_folder: /var/lib/libvirt/images/hosted_cluster
 hosted_cluster2_cpu: 4
 hosted_cluster2_memory: 8192
 hosted_cluster2_vm_folder: /var/lib/libvirt/images/hosted_cluster2
-

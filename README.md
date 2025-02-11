@@ -39,6 +39,7 @@ rhel9_kvm_image: rhel-9.5-x86_64-kvm.qcow2
 ```
 ## Getting Started
 We are using ansible-vault to store RHEL activation keys and PullSecret to install OCP cluster. 
+
 ```
 ansible-vault create vault.yaml
 New Vault password:
@@ -53,6 +54,10 @@ And we are all set to begin
 ### Setup Bare Metal Host
 
 Lets start with setting up the Bare Metal Host. 
+
+![Setup-BareMetal-Host](images/video-coming-soon.jpeg)
+
+
 ```
 [root@base hcp-on-bm]# ansible-playbook -i inventory/hosts setup_bm_host.yaml   --ask-vault-pass
 Vault password:
