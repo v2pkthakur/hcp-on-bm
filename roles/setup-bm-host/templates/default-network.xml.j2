@@ -16,6 +16,7 @@
   </dns>
   <ip address='192.168.122.1' netmask='255.255.255.0'>
     <dhcp>
+     <range start="192.168.122.201" end="192.168.122.249"/>
      {% for key,value in ip_list.items() %}
      <host mac='52:54:00:e2:54:{{ value }}' name='{{ key }}.hub.mylab.com' ip='192.168.122.{{ value }}'/>
      {% endfor %}
