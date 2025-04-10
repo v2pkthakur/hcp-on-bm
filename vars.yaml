@@ -20,15 +20,23 @@ ip_list:
   c2worker3: 53
   c2lb: 59
   c2vbmc: 71
+  aap: 81
 
 helper_name: helper
 helper_disk: helper_disk.qcow2
 helper_memory: 8192 
 helper_vcpus: 4
 
+# AAP Variables
+aap_name: aap
+aap_disk: aap_disk.qcow2
+aap_memory: 8192 
+aap_vcpus: 4
+
+
 ## Variables used by Setup BM Role 
 
-rhel9_kvm_image: "rhel-9.5-x86_64-kvm.qcow2"
+rhel9_kvm_image: "rhel-9.4-x86_64-kvm.qcow2"
 
 basic_packages: 
   - wget
@@ -44,7 +52,6 @@ basic_packages:
   - virt-viewer
   - xorg-x11-fonts-*
   - net-tools
-  - mlocate
   - sshpass
   - ipmitool
   - python-setuptools

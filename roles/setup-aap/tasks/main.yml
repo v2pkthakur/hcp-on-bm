@@ -1,0 +1,71 @@
+---
+# Start with Installing the required packages on the Host
+
+- name: Install Basic Required Packages.
+  yum:
+    name: "{{ basic_packages }}"
+    state: installed
+
+# Once Packages are installed, lets start the Libvirt Service
+- name: Start Libvirtd Service
+  systemd:
+    state: started
+    name: libvirtd
+    enabled: yes
+
+
+# Once Check if Key Exists
+- name: Check the SSH KeyPair Existence
+  stat:
+    path: "~/.ssh/lab_rsa"
+  register: ssh_key_status
+  tags:
+    - ssh
+
+# Create Key if not existing
+- name: Create SSH Key if not existing
+  community.crypto.openssh_keypair:
+    path: "~/.ssh/lab_rsa"
+    type: rsa
+    size: 2048
+    mode: '0600'
+  when: ssh_key_status.stat.exists == false 
+  tags:
+    - ssh
+
+# Enable Nested KVM
+- name: Enable Nested KVM
+  copy:
+    dest: /etc/modprobe.d/kvm-nested.conf
+    content: |
+      options kvm-intel nested=1
+
+# Prepare the KVM Image 
+- name: Remove Cloud-Init & Add Password  
+  shell: | 
+    export LIBGUESTFS_BACKEND=direct && virt-customize -a "{{ playbook_dir }}/files/{{ rhel9_kvm_image }}" --root-password password:redhat --ssh-inject "root:file:/root/.ssh/lab_rsa.pub" --selinux-relabel --run-command 'yum remove cloud-init* -y' --run-command 'echo "PermitRootLogin yes" >>/etc/ssh/sshd_config'
+
+# Once Check if Key Exists
+- name: Check the AAP Disk Existence
+  stat:
+    path: "/var/lib/libvirt/images/{{ aap_disk }}"
+  register: aap_disk_status
+   
+# Prepare the Helper Image 
+- name: Create Helper VM Disk
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/{{ rhel9_kvm_image }}"
+    dest: "/var/lib/libvirt/images/{{ aap_disk }}"
+  when: aap_disk_status.stat.exists == false
+
+# Check if AAP VM Exists 
+- name: Check if VM is running using virsh
+  shell: "virsh dominfo aap| grep 'State' | awk '{print $2}'"
+  register: vm_state
+  
+# Prepare the Helper Image 
+- name: Define the Helper VM 
+  shell: |
+    virt-install --import --name "{{ aap_name }}" --memory "{{ aap_memory }}" --vcpus "{{ aap_vcpus }}"  --disk "/var/lib/libvirt/images/{{ aap_disk }}",format=qcow2,bus=virtio  --os-variant=rhel9.4 --noautoconsole --network network:default,mac=52:54:00:e2:54:{{ip_list.aap}}
+  when: vm_state.stdout == ''
+  
