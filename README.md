@@ -108,4 +108,4 @@ To cleanup only the Hub Cluster VMs use `cleanup-hub.yaml`.
 [root@base hcp-on-bm]# ansible-playbook cleanup-hub.yaml
 ```
 
-
+Thank You
